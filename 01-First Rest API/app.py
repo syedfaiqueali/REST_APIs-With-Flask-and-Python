@@ -1,13 +1,7 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 
 app = Flask(__name__)
 
-# Request it going to understand
-'''
-@app.route('/')  # 'http://www.google.com/'
-def home():
-    return 'Hello, world faiq!'
-'''
 
 stores = [
     {
@@ -20,6 +14,11 @@ stores = [
         ]
     }
 ]
+
+
+@app.route('/')
+def home():
+    return render_template('index.html')
 
 # POST - used to receive the data
 # GET - used to send data back only
