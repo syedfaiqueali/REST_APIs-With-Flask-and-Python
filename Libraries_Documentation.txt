@@ -1,0 +1,40 @@
+THIS DOCUMENTATION CONTAINS ALL THE LIBRARIES AND METHODS USED IN THIS REPOSITORY 
+
+
+	⁃ Classes always start with a uppercase
+	⁃ Packages always start with a lowercase
+
+
+
+	• TO USE FLASK INTO APP
+	  from flask import Flask
+	  app = Flask(__name__)
+
+	• TO CONVERT DICTIONARY TO JSON
+	  from flask import jsonify
+	  jsonify(dict)
+
+	• TO LET BROWSER ACCESS THE DATA
+	  from flask import request
+	  request_data = request.get_json()
+
+	• TO RENDER HTML CODE FROM ‘TEMPLATES’ FOLDER INTO FLASK APP
+	  from flask import render_template
+	  render_template(‘index.html’)
+
+	• TO USE FLASK RESTFUL INTO APP
+	  from flask_restful import Resource, Api
+	  api = Api(app)
+
+	• TO COMPARE STRINGS SAFELY
+	  from werkzeug.security import safe_str_cmp
+	  safe_str_cmp(str1, str2)
+
+	• TO SETUP JWT INTO APP
+	  from flask_jwt import JWT
+	  from security import authenticate, identity 
+	  jwt = JWT(app, authenticate, identity)
+
+	• TO ENABLE JWT DECORATOR 
+	  from flask_jwt import jwt_required
+ 	  @jwt_required()
