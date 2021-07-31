@@ -1,14 +1,21 @@
 from flask import Flask, request
 from flask_restful import Resource, Api
+from flask_jwt import JWT, jwt_required
+
+from security import authenticate, identity
 
 app = Flask(__name__)
+app.secret_key = 'jose'
 api = Api(app)
 
+jwt = JWT(app, authenticate, identity)
+
+# list carrying items
 items = []
 
 # Defining the resource
 class Item(Resource):
-    # Defining methods
+    @jwt_required()
     def get(self, name):
         # filter(filter_func, list_of_items)
         # next would give first item found by the list but have to return none if no item found
@@ -19,7 +26,7 @@ class Item(Resource):
     def post(self, name):
         # If found an item so no need to add it just return message
         if next(filter(lambda x: x['name'] == name, items), None):
-            return {'message': 'An item with name '{}' already exists.'.format(name)}, 400
+            return {'message': 'An item with name {} already exists.'.format(name)}, 400
 
         # If the req doesn't have proper content type, this will trigger error
         # get_json(force,silent)
