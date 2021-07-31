@@ -37,16 +37,8 @@ class Item(Resource):
         if row:
             return {'item': {'name': row[0], 'price': row[1]}}
 
-
-    def post(self, name):
-        # If found an item so no need to add it just return message
-        if self.find_by_name(name):
-            return {'message': 'An item with name {} already exists.'.format(name)}, 400
-
-        data = Item.parser.parse_args()
-
-        item = {'name': name, 'price': data['price']}
-
+    @classmethod
+    def insert(cls, item):
         connection = sqlite3.connect('data.db')
         cursor = connection.cursor()
 
@@ -55,29 +47,68 @@ class Item(Resource):
 
         connection.commit()
         connection.close()
-        
+
+    @classmethod
+    def update(cls, item):
+        connection = sqlite3.connect('data.db')
+        cursor = connection.cursor()
+
+        query = "UPDATE items SET price=? WHERE name=?"
+        cursor.execute(query, (item['price'], item['name']))
+
+        connection.commit()
+        connection.close()
+
+
+    def post(self, name):
+        # If found an item so no need to add it just return message
+        if self.find_by_name(name):
+            return {'message': 'An item with name {} already exists.'.format(name)}, 400  # When req goes wrong
+
+        data = Item.parser.parse_args()
+
+        item = {'name': name, 'price': data['price']}
+
+        try:
+            self.insert(item)
+        except:
+            return {'message': 'An error occured inserting the item.'}, 500  # Internal Server Error
+
         return item, 201
 
+
     def delete(self, name):
-        global items
-        items = list(filter(lambda x: x['name'] != name, items))
+        connection = sqlite3.connect('data.db')
+        cursor = connection.cursor()
+
+        query = "DELETE FROM items WHERE name=?"
+        cursor.execute(query, (name,))
+
+        connection.commit()
+        connection.close()
+
         return {'message': 'Item deleted'}
 
     def put(self, name):
         # Getting items data
-        # data = request.get_json() # without payload
         data = Item.parser.parse_args()  # Parsing args come thru json payload
 
-        # Filtering list for the searched item
-        item = next(filter(lambda x: x['name'] == name, items), None)
-        # If item not in the list
+        item = self.find_by_name(name)
+        updated_item = {'name': name, 'price': data['price']}
+
+        # If item not in the dB
         if item is None:
-            item = {'name': name, 'price': data['price']}
-            items.append(item)
-        # If item found in the list
+            try:
+                self.insert(updated_item)
+            except:
+                return {'message': 'An error occured while inserting the item'}, 500
+        # If item found in the dB
         else:
-            item.update(data)
-        return item
+            try:
+                self.update(updated_item)
+            except:
+                return {'message': 'An error occured while updating the item'}, 500
+        return updated_item
 
 
 class ItemList(Resource):
