@@ -3,6 +3,7 @@ from flask_restful import Resource, Api, reqparse
 from flask_jwt import JWT, jwt_required
 
 from security import authenticate, identity
+from user import UserRegister
 
 app = Flask(__name__)
 app.secret_key = 'jose'
@@ -43,7 +44,7 @@ class Item(Resource):
         # silent=True ;dont give error but return none
         # data = request.get_json()  # Without payload
         data = Item.parser.parse_args()
-        
+
         item = {'name': name, 'price': data['price']}
         items.append(item)
         return item, 201
@@ -80,5 +81,6 @@ class ItemList(Resource):
 # Adding resource and determine how its going to be access
 api.add_resource(Item, '/item/<string:name>')
 api.add_resource(ItemList, '/items')
+api.add_resource(UserRegister, '/register')
 
 app.run(port=5000, debug=True)
