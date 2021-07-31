@@ -38,3 +38,7 @@ THIS DOCUMENTATION CONTAINS ALL THE LIBRARIES AND METHODS USED IN THIS REPOSITOR
 	• TO ENABLE JWT DECORATOR 
 	  from flask_jwt import jwt_required
  	  @jwt_required()
+
+	• TO ENABLE SQLITE
+	  import sqlite3
+	  connection = sqlite3.connect('data.db')
