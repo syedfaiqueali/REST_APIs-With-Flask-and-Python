@@ -1,5 +1,5 @@
 from flask import Flask, request
-from flask_restful import Resource, Api
+from flask_restful import Resource, Api, reqparse
 from flask_jwt import JWT, jwt_required
 
 from security import authenticate, identity
@@ -16,6 +16,14 @@ items = []
 
 # Defining the resource
 class Item(Resource):
+    # Parsing the request
+    parser = reqparse.RequestParser()
+    parser.add_argument('price',
+        type = float,     # Price only float
+        required = True,  # No req without price
+        help = "This field cannot be left blank"
+    )
+
     @jwt_required()
     def get(self, name):
         # filter(filter_func, list_of_items)
@@ -33,7 +41,9 @@ class Item(Resource):
         # get_json(force,silent)
         # force=True ;dont need content-type header, nice but dangerous
         # silent=True ;dont give error but return none
-        data = request.get_json()
+        # data = request.get_json()  # Without payload
+        data = Item.parser.parse_args()
+        
         item = {'name': name, 'price': data['price']}
         items.append(item)
         return item, 201
@@ -45,7 +55,9 @@ class Item(Resource):
 
     def put(self, name):
         # Getting items data
-        data = request.get_json()
+        # data = request.get_json() # without payload
+        data = Item.parser.parse_args()  # Parsing args come thru json payload
+
         # Filtering list for the searched item
         item = next(filter(lambda x: x['name'] == name, items), None)
         # If item not in the list
