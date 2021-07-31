@@ -3,6 +3,9 @@ THIS DOCUMENTATION CONTAINS ALL THE LIBRARIES AND METHODS USED IN THIS REPOSITOR
 
 	⁃ Classes always start with a uppercase
 	⁃ Packages always start with a lowercase
+	⁃ Model is an internal representation of an entity 
+	⁃ Resource is an external representation of an entity to which client interacts
+	⁃ Model is an helper that gives us more flexibility without polluting the Resources
 
 
 
