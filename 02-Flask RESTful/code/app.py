@@ -8,6 +8,7 @@ app = Flask(__name__)
 app.secret_key = 'jose'
 api = Api(app)
 
+# /auth
 jwt = JWT(app, authenticate, identity)
 
 # list carrying items
@@ -36,6 +37,11 @@ class Item(Resource):
         item = {'name': name, 'price': data['price']}
         items.append(item)
         return item, 201
+
+    def delete(self,name):
+        global items
+        items = list(filter(lambda x: x['name'] != name, items))
+        return {'message': 'Item deleted'}
 
 
 class ItemList(Resource):
