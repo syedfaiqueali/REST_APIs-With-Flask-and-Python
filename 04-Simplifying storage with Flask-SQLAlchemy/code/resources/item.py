@@ -3,7 +3,6 @@ from flask_jwt import jwt_required
 from models.item import ItemModel
 
 
-# Defining the resource
 class Item(Resource):
     # Parsing the request
     parser = reqparse.RequestParser()
@@ -18,6 +17,7 @@ class Item(Resource):
         help = "Every item needs a store it"
     )
 
+    # Endpoints
     @jwt_required()
     def get(self, name):
         '''

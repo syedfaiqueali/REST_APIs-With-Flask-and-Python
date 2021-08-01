@@ -18,6 +18,7 @@ class UserRegister(Resource):
         help = "This field cannot be blank."
     )
 
+    # Endpoints
     def post(self):
         # Using UserRegister parser
         data = UserRegister.parser.parse_args()
