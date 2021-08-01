@@ -15,6 +15,12 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False         # Disable db to tra
 app.secret_key = 'jose'
 api = Api(app)
 
+# This decorator is going to affect method below it
+#  and going to run first before first request into this app
+@app.before_first_request
+def create_tables():
+    db.create_all()
+
 # /auth
 jwt = JWT(app, authenticate, identity)
 
