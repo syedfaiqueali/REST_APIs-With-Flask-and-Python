@@ -10,7 +10,8 @@ from db import db
 
 # App config properties
 app = Flask(__name__)
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'  # From where to read db file
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False         # Disable db to track every modifications
 app.secret_key = 'jose'
 api = Api(app)
 
