@@ -12,6 +12,11 @@ class Item(Resource):
         required = True,  # No req without price
         help = "This field cannot be left blank"
     )
+    parser.add_argument('store_id',
+        type = int,
+        required = True,
+        help = "Every item needs a store it"
+    )
 
     @jwt_required()
     def get(self, name):
@@ -31,7 +36,7 @@ class Item(Resource):
 
         data = Item.parser.parse_args()
 
-        item = ItemModel(name, data['price'])
+        item = ItemModel(name, data['price'], data['store_id'])
 
         try:
             item.save_to_db()
@@ -58,7 +63,7 @@ class Item(Resource):
         # If item not in the dB
         if item is None:
             try:
-                item = ItemModel(name, data['price'])
+                item = ItemModel(name, **data) # or (name, data['price'], data['store_id'])
             except:
                 return {'message': 'An error occured while inserting the item'}, 500
         # If item found in the dB

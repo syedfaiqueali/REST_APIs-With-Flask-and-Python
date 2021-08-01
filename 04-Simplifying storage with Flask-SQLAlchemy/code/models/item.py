@@ -3,13 +3,20 @@ from db import db
 class ItemModel(db.Model):
     # To Tell SQLAlchemy tablename and col_name
     __tablename__ = 'items'
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
     price = db.Column(db.Float(precision=2))
 
-    def __init__(self, name, price):
+    store_id = db.Column(db.Integer, db.ForeignKey('stores.id'))
+    # It will see store_id and find items belonging to that store
+    # No needs for joins in SQLAlchemy
+    store = db.relationship('StoreModel')
+
+    def __init__(self, name, price, store_id):
         self.name = name
         self.price = price
+        self.store_id = store_id
 
     def json(self):
         return {'name': self.name, 'price': self.price}
