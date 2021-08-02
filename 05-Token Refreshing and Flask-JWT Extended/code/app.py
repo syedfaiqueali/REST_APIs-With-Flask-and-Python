@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
 
@@ -6,6 +6,7 @@ from db import db
 from resources.user import UserRegister, User, UserLogin, TokenRefresh   # Importing resources to let SQLAlchemy know them
 from resources.item import Item, ItemList
 from resources.store import Store, StoreList
+from blacklist import BLACKLIST
 
 # App config properties
 app = Flask(__name__)
@@ -13,6 +14,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'  # From where to rea
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False         # Disable db to track every modifications
 app.config['PROPAGATE_EXCEPTION'] = True                     # To allow Flask Extensions raise their own exceptions
 # app.config['JWT_SECRET_KEY'] => If want to have app and jwt secret key diff
+app.config['JWT_BLACKLIST_ENABLED'] = True
+app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access', 'refresh'] #Enable blacklist for both 'access' and 'refresh'
 app.secret_key = 'jose'                                      # 'jose' is used to encrypt the JWT
 api = Api(app)
 
@@ -32,6 +35,12 @@ def add_claims_to_jwt(identity):
     if identity == 1: # Instead of hard coding, read it from a config file or a dB
         return {'is_admin': True}
     return {'is_admin': False}
+
+# Return true if token being sent isn't the blacklisted
+@jwt.token_in_blacklist_loader
+def check_if_token_in_blacklist(decrypted_token):     # Can access any detail from decrypted_token
+    return decrypted_token['identity'] in BLACKLIST   # return => Bool ;if false then goes to revoked_token_callback()
+
 
 # To what to tell user when their token is expired, i.e after 5mins
 @jwt.expired_token_loader
