@@ -1,5 +1,5 @@
 from flask_restful import Resource, reqparse
-from flask_jwt import jwt_required
+from flask_jwt_extended import jwt_required
 from models.item import ItemModel
 
 
@@ -18,7 +18,7 @@ class Item(Resource):
     )
 
     # Endpoints
-    @jwt_required()
+    @jwt_required   # Without @jwt_required() at end because of 'flask_jwt_extended'
     def get(self, name):
         '''
         To select item from database with specific 'name'
