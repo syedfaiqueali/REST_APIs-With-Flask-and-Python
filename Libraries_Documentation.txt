@@ -8,6 +8,9 @@ THIS DOCUMENTATION CONTAINS ALL THE LIBRARIES AND METHODS USED IN THIS REPOSITOR
 	⁃ Model is an helper that gives us more flexibility without polluting the Resources.
 	⁃ Fresh Token which we receive after entering username and password.
 	⁃ Non Fresh Token which we receive by refreshing a previous token.	
+	⁃ @jwt_required ;will work for both access_token and refresh_token, either of those will work
+	⁃ @fresh_jwt_required ;needs fresh jwt if access_token comes through this post is not fresh ;when recent logged required
+	⁃ @jwt_refresh_token_required ;will issue a new refresh_token
 
 
 
