@@ -17,7 +17,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/faiqueali017/REST_APIs-With-Flask-and-Python">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="images/logo.png" alt="Logo" width="438" height="245">
   </a>
 
   <h3 align="center">REST APIs with Flask and Python</h3>
