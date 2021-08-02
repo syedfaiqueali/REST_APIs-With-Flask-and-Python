@@ -116,17 +116,17 @@ You should have python and pip installed on your machine.
    pip install virtualenv
    ```
 4. To restrict python version in your environment
-  ```sh
-  virtualenv venv --python=python3.8
-  ```
+   ```sh
+   virtualenv venv --python=python3.8
+   ```
 5. To activate the environment
-  ```sh
-  source venv/bin/activate
-  ```
+   ```sh
+   source venv/bin/activate
+   ```
 6. To run local server
-  ```
-  python app.py
-  ```
+   ```
+   python app.py
+   ```
 
 
 
