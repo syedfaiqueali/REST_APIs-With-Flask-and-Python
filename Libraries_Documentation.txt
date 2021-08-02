@@ -1,11 +1,20 @@
 THIS DOCUMENTATION CONTAINS ALL THE LIBRARIES AND METHODS USED IN THIS REPOSITORY 
 
 
-	⁃ Classes always start with a uppercase
-	⁃ Packages always start with a lowercase
-	⁃ Model is an internal representation of an entity 
-	⁃ Resource is an external representation of an entity to which client interacts
-	⁃ Model is an helper that gives us more flexibility without polluting the Resources
+	⁃ Classes always start with a uppercase.
+	⁃ Packages always start with a lowercase.
+	⁃ Model is an internal representation of an entity.
+	⁃ Resource is an external representation of an entity to which client interacts.
+	⁃ Model is an helper that gives us more flexibility without polluting the Resources.
+	⁃ Fresh Token which we receive after entering username and password.
+	⁃ Non Fresh Token which we receive by refreshing a previous token.	
+	⁃ @jwt_required ;will work for both access_token and refresh_token, either of those will work
+	⁃ @fresh_jwt_required ;needs fresh jwt if access_token comes through this post is not fresh ;when recent logged required
+	⁃ @jwt_refresh_token_required ;will issue a new refresh_token
+	⁃ @jwt.invalid_token_loader ;When token sent us is not an actual JWT
+	⁃ @jwt.unauthorized_loader ;When request doesn't sends jwt, so not authorized
+	⁃ @jwt.needs_fresh_token_loader ;When our end point requires a fresh token but the req contains not_fresh_token
+	⁃ @jwt.revoked_token_loader ;When user logged out so put that token in revoked tokens list
 
 
 
@@ -38,6 +47,10 @@ THIS DOCUMENTATION CONTAINS ALL THE LIBRARIES AND METHODS USED IN THIS REPOSITOR
 	  from security import authenticate, identity 
 	  jwt = JWT(app, authenticate, identity)
 
+	• TO PARSE THE REQUEST
+	  from flask_restful import Resource
+        parser = reqparse.RequestParser()
+
 	• TO ENABLE JWT DECORATOR 
 	  from flask_jwt import jwt_required
  	  @jwt_required()
@@ -45,3 +58,8 @@ THIS DOCUMENTATION CONTAINS ALL THE LIBRARIES AND METHODS USED IN THIS REPOSITOR
 	• TO ENABLE SQLITE
 	  import sqlite3
 	  connection = sqlite3.connect('data.db')
+
+	• TO USE FLASK_JWT_EXTENDED INTO APP
+	  from flask_jwt_extended import JWTManager
+	  jwt = JWTManager(app)
+
