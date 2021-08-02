@@ -25,6 +25,15 @@ def create_tables():
 # not creating /auth, have to create them self explicitly
 jwt = JWTManager(app)
 
+# This decorator will link our func to the above JWTManager
+# This func will check that if we may want to add some extra data to our JWT
+@jwt.user_claims_loader
+def add_claims_to_jwt(identity):
+    if identity == 1: # Instead of hard coding, read it from a config file or a dB
+        return {'is_admin': True}
+    return {'is_admin': False}
+
+
 # Adding resource and determine how its going to be access
 api.add_resource(Store, '/store/<string:name>')
 api.add_resource(Item, '/item/<string:name>')
