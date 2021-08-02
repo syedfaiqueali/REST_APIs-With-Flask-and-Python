@@ -3,10 +3,13 @@ from flask_jwt_extended import (
      create_access_token,
      create_refresh_token,
      jwt_refresh_token_required,
-     get_jwt_identity
+     get_jwt_identity,
+     jwt_required,
+     get_raw_jwt
 )
 from werkzeug.security import safe_str_cmp
 from models.user import UserModel
+from blacklist import BLACKLIST
 
 # Extract username and password from the request
 # _user_parser => underscore in start to make its access 'private'
@@ -64,6 +67,7 @@ class User(Resource):
 
 
 class UserLogin(Resource):
+    @classmethod
     def post(self):
         # Parse user's sent data from the req and return it as dict
         data = _user_parser.parse_args()
@@ -84,6 +88,16 @@ class UserLogin(Resource):
 
         # User doesn't exists
         return {'message': 'Invalid credentials!'}, 401
+
+
+class UserLogout(Resource):
+    @jwt_required
+    def post(self):
+        # jti is JWT ID, a unique identifier for a JWT.
+        jti = get_raw_jwt()['jti']
+        BLACKLIST.add(jti)
+        return {'message': 'Successfully logged out.'}, 200
+
 
 class TokenRefresh(Resource):
     @jwt_refresh_token_required

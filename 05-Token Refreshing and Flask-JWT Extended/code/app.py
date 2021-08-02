@@ -3,7 +3,7 @@ from flask_restful import Api
 from flask_jwt_extended import JWTManager
 
 from db import db
-from resources.user import UserRegister, User, UserLogin, TokenRefresh   # Importing resources to let SQLAlchemy know them
+from resources.user import UserRegister, User, UserLogin, UserLogout, TokenRefresh   # Importing resources to let SQLAlchemy know them
 from resources.item import Item, ItemList
 from resources.store import Store, StoreList
 from blacklist import BLACKLIST
@@ -38,8 +38,8 @@ def add_claims_to_jwt(identity):
 
 # Return true if token being sent isn't the blacklisted
 @jwt.token_in_blacklist_loader
-def check_if_token_in_blacklist(decrypted_token):     # Can access any detail from decrypted_token
-    return decrypted_token['identity'] in BLACKLIST   # return => Bool ;if false then goes to revoked_token_callback()
+def check_if_token_in_blacklist(decrypted_token):   # Can access any detail from decrypted_token
+    return decrypted_token['jti'] in BLACKLIST      # return => Bool ;if false then goes to revoked_token_callback()
 
 
 # To what to tell user when their token is expired, i.e after 5mins
@@ -89,6 +89,7 @@ api.add_resource(StoreList, '/stores')
 api.add_resource(UserRegister, '/register')
 api.add_resource(User, '/user/<int:user_id>')
 api.add_resource(UserLogin, '/login') # can also call it /auth
+api.add_resource(UserLogout, '/logout')
 api.add_resource(TokenRefresh, '/refresh')
 
 if __name__ == '__main__':
