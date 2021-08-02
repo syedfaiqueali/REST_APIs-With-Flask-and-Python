@@ -169,13 +169,13 @@ LinkedIn Profile: [https://www.linkedin.com/in/faique-ali/](https://www.linkedin
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/othneildrew/Best-README-Template.svg?style=for-the-badge
+[contributors-shield]: https://img.shields.io/github/contributors/faiqueali017/REST_APIs-With-Flask-and-Python.svg?style=for-the-badge
 [contributors-url]: https://github.com/faiqueali017/REST_APIs-With-Flask-and-Python/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=for-the-badge
+[forks-shield]: https://img.shields.io/github/forks/faiqueali017/REST_APIs-With-Flask-and-Python.svg?style=for-the-badge
 [forks-url]: https://github.com/faiqueali017/REST_APIs-With-Flask-and-Python/network/members
-[stars-shield]: https://img.shields.io/github/stars/othneildrew/Best-README-Template.svg?style=for-the-badge
+[stars-shield]: https://img.shields.io/github/stars/faiqueali017/REST_APIs-With-Flask-and-Python.svg?style=for-the-badge
 [stars-url]: https://github.com/faiqueali017/REST_APIs-With-Flask-and-Python/stargazers
-[issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=for-the-badge
+[issues-shield]: https://img.shields.io/github/issues/faiqueali017/REST_APIs-With-Flask-and-Python.svg?style=for-the-badge
 [issues-url]: https://github.com/faiqueali017/REST_APIs-With-Flask-and-Python/issues
 [license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
 [license-url]: https://github.com/othneildrew/Best-README-Template/blob/master/LICENSE.txt
