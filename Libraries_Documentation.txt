@@ -11,6 +11,10 @@ THIS DOCUMENTATION CONTAINS ALL THE LIBRARIES AND METHODS USED IN THIS REPOSITOR
 	⁃ @jwt_required ;will work for both access_token and refresh_token, either of those will work
 	⁃ @fresh_jwt_required ;needs fresh jwt if access_token comes through this post is not fresh ;when recent logged required
 	⁃ @jwt_refresh_token_required ;will issue a new refresh_token
+	⁃ @jwt.invalid_token_loader ;When token sent us is not an actual JWT
+	⁃ @jwt.unauthorized_loader ;When request doesn't sends jwt, so not authorized
+	⁃ @jwt.needs_fresh_token_loader ;When our end point requires a fresh token but the req contains not_fresh_token
+	⁃ @jwt.revoked_token_loader ;When user logged out so put that token in revoked tokens list
 
 
 
