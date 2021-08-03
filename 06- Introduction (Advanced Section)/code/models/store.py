@@ -1,3 +1,4 @@
+from typing import Dict, List   # For type hinting
 from db import db
 
 class StoreModel(db.Model):
@@ -13,10 +14,10 @@ class StoreModel(db.Model):
     # we have to look into table again and again
     items = db.relationship('ItemModel', lazy='dynamic')
 
-    def __init__(self, name):
+    def __init__(self, name: str):
         self.name = name
 
-    def json(self):
+    def json(self) -> Dict:
         return {
             'id': self.id,
             'name': self.name,
@@ -24,19 +25,19 @@ class StoreModel(db.Model):
         }
 
     @classmethod
-    def find_by_name(cls, name):
+    def find_by_name(cls, name: str):
         # return an item obj from db
         return cls.query.filter_by(name=name).first() # SELECT * FROM stores WHERE name=name LIMIT 1
 
     @classmethod
-    def find_all(cls):
+    def find_all(cls) -> List:
         return cls.query.all()
 
     # Using both for insert and update
-    def save_to_db(self):
+    def save_to_db(self) -> None:
         db.session.add(self)
         db.session.commit()
 
-    def delete_from_db(self):
+    def delete_from_db(self) -> None:
         db.session.delete(self)
         db.session.commit()

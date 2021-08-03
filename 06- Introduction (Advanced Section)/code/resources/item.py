@@ -21,7 +21,7 @@ class Item(Resource):
     )
 
     # Endpoints
-    def get(self, name):
+    def get(self, name: str):
         '''
         To select item from database with specific 'name'
         '''
@@ -31,7 +31,7 @@ class Item(Resource):
         return {'message': 'Item not found'}, 404
 
     @fresh_jwt_required
-    def post(self, name):
+    def post(self, name: str):
         # If found an item so no need to add it just return message
         if ItemModel.find_by_name(name):
             return {'message': 'An item with name {} already exists.'.format(name)}, 400  # When req goes wrong
@@ -48,7 +48,7 @@ class Item(Resource):
         return item.json(), 201
 
     @jwt_required
-    def delete(self, name):
+    def delete(self, name: str):
         # Finding item
         item = ItemModel.find_by_name(name)
         # Checking if not null so delete
@@ -57,7 +57,7 @@ class Item(Resource):
             return {'message': 'Item deleted'}, 200
         return {'message': 'Item not found'}, 404
 
-    def put(self, name):
+    def put(self, name: str):
         # Getting items data
         data = Item.parser.parse_args()  # Parsing args come thru json payload
 

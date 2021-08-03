@@ -55,7 +55,7 @@ class User(Resource):
 
 
     @classmethod
-    def delete(cls, user_id):
+    def delete(cls, user_id: int):
         user = UserModel.find_by_id(user_id)
 
         # If user not found in db
