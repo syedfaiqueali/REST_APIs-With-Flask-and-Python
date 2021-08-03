@@ -27,7 +27,7 @@ class Item(Resource):
         '''
         item = ItemModel.find_by_name(name)
         if item:
-            return item.json()
+            return item.json(), 200
         return {'message': 'Item not found'}, 404
 
     @fresh_jwt_required

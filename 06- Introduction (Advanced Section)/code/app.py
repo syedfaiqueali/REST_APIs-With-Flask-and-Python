@@ -35,7 +35,7 @@ def check_if_token_in_blacklist(decrypted_token):   # Can access any detail from
 
 
 
-# Adding resource and determine how its going to be access
+# Registering resource and determine how its going to be access
 api.add_resource(Store, '/store/<string:name>')
 api.add_resource(StoreList, '/stores')
 api.add_resource(Item, '/item/<string:name>')

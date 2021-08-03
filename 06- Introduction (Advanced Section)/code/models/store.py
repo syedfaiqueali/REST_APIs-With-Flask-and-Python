@@ -5,7 +5,7 @@ class StoreModel(db.Model):
     __tablename__ = 'stores'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80))
+    name = db.Column(db.String(80), unique=True)
 
     # Back reference of store to keep check of its items
     # lazy='dynamic' ;tells SQLAlchemy to not go into the items table
