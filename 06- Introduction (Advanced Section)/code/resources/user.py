@@ -18,7 +18,7 @@ CREATED_SUCCESSFULLY = "User created successfully."
 USER_NOT_FOUND = "User not found."
 USER_DELETED = "User deleted."
 INVALID_CREDENTIALS = "Invalid credentials!"
-USER_LOGGED_OUT = "User <id={user_id} successfully logged out."
+USER_LOGGED_OUT = "User <id={}> successfully logged out."
 
 # Extract username and password from the request
 # _user_parser => underscore in start to make its access 'private'
@@ -104,6 +104,7 @@ class UserLogout(Resource):
     def post(cls):
         # jti is JWT ID, a unique identifier for a JWT.
         jti = get_raw_jwt()["jti"]
+        user_id = get_jwt_identity()
         BLACKLIST.add(jti)
         return {"message": USER_LOGGED_OUT.format(user_id)}, 200
 
