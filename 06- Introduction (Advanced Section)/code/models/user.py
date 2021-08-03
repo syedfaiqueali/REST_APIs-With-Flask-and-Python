@@ -1,5 +1,7 @@
-from typing import Dict
+from typing import Dict, Union
 from db import db
+
+UserJSON = Dict[str, Union[int, str]]
 
 class UserModel(db.Model):
     # To Tell SQLAlchemy tablename and col_name
@@ -13,7 +15,7 @@ class UserModel(db.Model):
         self.username = username
         self.password = password
 
-    def json(self) -> Dict:
+    def json(self) -> UserJSON:
         return { 'id': self.id, 'username': self.username}
 
     @classmethod

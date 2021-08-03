@@ -1,5 +1,8 @@
-from typing import Dict, List   # For type hinting
+from typing import Dict, List, Union   # For type hinting
 from db import db
+from models.item import ItemJSON
+
+StoreJSON = Dict[str, Union[int, str, List[ItemJSON]]]
 
 class StoreModel(db.Model):
     # To Tell SQLAlchemy tablename and col_name
@@ -17,7 +20,7 @@ class StoreModel(db.Model):
     def __init__(self, name: str):
         self.name = name
 
-    def json(self) -> Dict:
+    def json(self) -> StoreJSON:
         return {
             'id': self.id,
             'name': self.name,
