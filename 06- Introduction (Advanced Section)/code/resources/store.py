@@ -10,14 +10,16 @@ STORE_DELETED = "Store deleted."
 
 class Store(Resource):
     # Endpoints
-    def get(self, name: str):
+    @classmethod
+    def get(cls, name: str):
         store = StoreModel.find_by_name(name)
         # If store found
         if store:
             return store.json()  # Return items as well
         return {"message": STORE_NOT_FOUND}, 404
 
-    def post(self, name: str):
+    @classmethod
+    def post(cls, name: str):
         if StoreModel.find_by_name(name):
             return {"message": NAME_ALREDY_EXISTS.format(name)}, 400
 
@@ -30,7 +32,8 @@ class Store(Resource):
 
         return store.json(), 201
 
-    def delete(self, name: str):
+    @classmethod
+    def delete(cls, name: str):
         store = StoreModel.find_by_name(name)
         if store:
             store.delete_from_db()
@@ -39,7 +42,8 @@ class Store(Resource):
 
 
 class StoreList(Resource):
-    def get(self):
+    @classmethod
+    def get(cls):
         return {
             "stores": [store.json() for store in StoreModel.find_all()]
         }  # query.all() is not suitable to use in Resource
