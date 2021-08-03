@@ -16,6 +16,12 @@ THIS DOCUMENTATION CONTAINS ALL THE LIBRARIES AND METHODS USED IN THIS REPOSITOR
 	⁃ @jwt.needs_fresh_token_loader ;When our end point requires a fresh token but the req contains not_fresh_token
 	⁃ @jwt.revoked_token_loader ;When user logged out so put that token in revoked tokens list
 
+	⁃ # INSTANCE METHOD
+	  item = Item()
+	  item.get()
+
+	⁃ # CLASS METHOD(Better) & STATIC METHOD
+	  Item.get()    ; No diff when called, only diff is class method passes 'class' as an arg i.e. def get(cls, name):
 
 
 	• TO USE FLASK INTO APP
