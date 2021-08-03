@@ -8,13 +8,10 @@ class UserModel(db.Model):
     # To Tell SQLAlchemy tablename and col_name
     __tablename__ = "users"
 
+    # nullable=False ;will check whether req or not when loading data into ma
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80))
-    password = db.Column(db.String(80))
-
-    def __init__(self, username: str, password: str):
-        self.username = username
-        self.password = password
+    username = db.Column(db.String(80), nullable=False, unique=True)
+    password = db.Column(db.String(80), nullable=False)
 
     @classmethod
     def find_by_username(cls, username: str) -> "UserModel":

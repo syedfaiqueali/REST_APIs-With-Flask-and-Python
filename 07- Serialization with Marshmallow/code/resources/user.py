@@ -31,18 +31,16 @@ class UserRegister(Resource):
     # Endpoints
     @classmethod
     def post(cls):
-        # Passing dict from req to user_schema
+        # Creating a UserModel obj
         try:
-            user_data = user_schema.load(request.get_json())
+            user = user_schema.load(request.get_json())
         except ValidationError as err:
             return err.messages, 400
 
         # Check if user already exists
-        if UserModel.find_by_username(user_data["username"]):
+        if UserModel.find_by_username(user.username):
             return {"message": USER_ALREADY_EXISTS}, 400
 
-        # Creating a UserModel obj and unpacking user_data dict containing username and password
-        user = UserModel(**user_data)
         user.save_to_db()
 
         return {"message": CREATED_SUCCESSFULLY}, 201
@@ -77,15 +75,15 @@ class UserLogin(Resource):
         # Passing dict from req to user_schema
         try:
             user_json = request.get_json()
-            user_data = user_schema.load(user_json)
+            user_data = user_schema.load(user_json)  # Which we got from request
         except ValidationError as err:
             return err.messages, 400
 
-        # find user in database
-        user = UserModel.find_by_username(user_data["username"])
+        # find req data into the dB => returns obj
+        user = UserModel.find_by_username(user_data.username)
 
         # check user and password => authenticate()
-        if user and safe_str_cmp(user.password, user_data["password"]):
+        if user and safe_str_cmp(user.password, user_data.password):
             # create access and refresh token and return it => identity()
             access_token = create_access_token(identity=user.id, fresh=True)
             refresh_token = create_refresh_token(user.id)
