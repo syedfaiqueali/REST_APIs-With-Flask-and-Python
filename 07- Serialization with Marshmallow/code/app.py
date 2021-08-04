@@ -1,11 +1,14 @@
 from flask import Flask, jsonify
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
+from marshmallow import ValidationError
 
 from ma import ma
 from db import db
 from blacklist import BLACKLIST
 from resources.user import UserRegister, User, UserLogin, UserLogout, TokenRefresh
+from resources.item import Item, ItemList
+from resources.store import Store, StoreList
 
 # App config properties
 app = Flask(__name__)
@@ -34,6 +37,12 @@ def create_tables():
     db.create_all()
 
 
+# By defining this now no need to try except ValidationError anywhere
+@app.errorhandler(ValidationError)
+def handle_marshmallow_validation(err):
+    return jsonify(err.messages), 400
+
+
 # not creating /auth, have to create them self explicitly
 jwt = JWTManager(app)
 
@@ -53,6 +62,11 @@ api.add_resource(User, "/user/<int:user_id>")
 api.add_resource(UserLogin, "/login")  # can also call it /auth
 api.add_resource(UserLogout, "/logout")
 api.add_resource(TokenRefresh, "/refresh")
+api.add_resource(Item, "/item/<string:name>")
+api.add_resource(ItemList, "/items")
+api.add_resource(Store, "/store/<string:name>")
+api.add_resource(StoreList, "/stores")
+
 
 if __name__ == "__main__":
     db.init_app(app)

@@ -1,5 +1,6 @@
 from flask_restful import Resource
 from flask import request
+from werkzeug.security import safe_str_cmp
 from flask_jwt_extended import (
     create_access_token,
     create_refresh_token,
@@ -8,8 +9,6 @@ from flask_jwt_extended import (
     jwt_required,
     get_raw_jwt,
 )
-from marshmallow import ValidationError
-from werkzeug.security import safe_str_cmp
 from models.user import UserModel
 from schemas.user import UserSchema
 from blacklist import BLACKLIST
@@ -32,10 +31,8 @@ class UserRegister(Resource):
     @classmethod
     def post(cls):
         # Creating a UserModel obj
-        try:
-            user = user_schema.load(request.get_json())
-        except ValidationError as err:
-            return err.messages, 400
+        user_json = request.get_json()
+        user = user_schema.load(user_json)
 
         # Check if user already exists
         if UserModel.find_by_username(user.username):
@@ -73,11 +70,8 @@ class UserLogin(Resource):
     @classmethod
     def post(cls):
         # Passing dict from req to user_schema
-        try:
-            user_json = request.get_json()
-            user_data = user_schema.load(user_json)  # Which we got from request
-        except ValidationError as err:
-            return err.messages, 400
+        user_json = request.get_json()
+        user_data = user_schema.load(user_json)  # Which we got from request
 
         # find req data into the dB => returns obj
         user = UserModel.find_by_username(user_data.username)
