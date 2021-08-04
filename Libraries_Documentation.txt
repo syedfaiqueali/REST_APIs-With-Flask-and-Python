@@ -23,6 +23,14 @@ THIS DOCUMENTATION CONTAINS ALL THE LIBRARIES AND METHODS USED IN THIS REPOSITOR
 	⁃ # CLASS METHOD(Better) & STATIC METHOD
 	  Item.get()    ; No diff when called, only diff is class method passes 'class' as an arg i.e. def get(cls, name):
 
+	⁃ MARSHMALLOW
+	⁃ Serialization   ;Takes an obj and passes obj properties to Schema and gives a dict, when do a 'dump'
+	⁃ Deserialization ;Takes a dict and converts it into obj
+
+	⁃ # FLASK MARSHMALLOW
+	  Added lib and give 'model = UserModel' to create and instead of giving json back it looks into the column def and
+	  validates against them and if all passes it gives back a user model instead of a dict
+
 
 	• TO USE FLASK INTO APP
 	  from flask import Flask
