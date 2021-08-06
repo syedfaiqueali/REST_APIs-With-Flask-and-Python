@@ -1,5 +1,5 @@
 from flask_restful import Resource
-from flask import request
+from flask import request, make_response, render_template, redirect
 from werkzeug.security import safe_str_cmp
 from flask_jwt_extended import (
     create_access_token,
@@ -131,4 +131,9 @@ class UserConfirm(Resource):
         # If user found in dB so activate him
         user.activated = True
         user.save_to_db()
-        return {"message": USER_CONFIRMED}, 200
+
+        # To redirect
+        # return redirect("http://localhost:3000", code=302)
+
+        headers = {"Content-Type": "text/html"}
+        return make_response(render_template("confirmation_page.html", email=user.username), 200, headers)
