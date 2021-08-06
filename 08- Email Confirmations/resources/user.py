@@ -1,3 +1,4 @@
+import traceback
 from flask_restful import Resource
 from flask import request, make_response, render_template, redirect
 from werkzeug.security import safe_str_cmp
@@ -16,7 +17,7 @@ from blacklist import BLACKLIST
 # Constants
 BLANK_ERROR = "{} cannot be blank."
 USER_ALREADY_EXISTS = "A user with that username already exists."
-CREATED_SUCCESSFULLY = "User created successfully."
+EMAIL_ALREADY_EXITS = "An email with that email already exists."
 USER_NOT_FOUND = "User not found."
 USER_DELETED = "User deleted."
 INVALID_CREDENTIALS = "Invalid credentials!"
@@ -25,6 +26,9 @@ NOT_CONFIRMED_ERROR = (
     "You have not confirmed registeration, please check your email <{}>."
 )
 USER_CONFIRMED = "User confirmed."
+FAILED_TO_CREATE = "Internal Server Error. Failed to create user."
+SUCCESS_REGISTER_MESSAGE = "Account created successfully, an email with an authentication link has been sent to your email address, please check."
+
 
 # Creating Schema
 user_schema = UserSchema()
@@ -36,16 +40,24 @@ class UserRegister(Resource):
     def post(cls):
         # Creating a UserModel obj
         user_json = request.get_json()
-        user = user_schema.load(user_json)  #return dict
-        user_obj = UserModel(**user)   #convert dict to obj
+        user = user_schema.load(user_json)  # return dict
+        user_obj = UserModel(**user)  # convert dict to obj
 
         # Check if user already exists
         if UserModel.find_by_username(user_obj.username):
             return {"message": USER_ALREADY_EXISTS}, 400
 
-        user_obj.save_to_db()
+        # Check if email is unique
+        if UserModel.find_by_email(user_obj.email):
+            return {"message": EMAIL_ALREADY_EXITS}, 400
 
-        return {"message": CREATED_SUCCESSFULLY}, 201
+        try:
+            user_obj.save_to_db()
+            user_obj.send_confirmation_email()
+            return {"message": SUCCESS_REGISTER_MESSAGE}, 201
+        except:
+            traceback.print_exc()  # To print err in console
+            return {"message": FAILED_TO_CREATE}, 500
 
 
 class User(Resource):
@@ -76,7 +88,9 @@ class UserLogin(Resource):
     def post(cls):
         # Passing dict from req to user_schema
         user_json = request.get_json()
-        user_data = user_schema.load(user_json)  # Which we got from request
+        user_data = user_schema.load(
+            user_json, partial=("email",)
+        )  # Which we got from request, ignore email if not present
 
         user_obj = UserModel(**user_data)
 
@@ -136,4 +150,6 @@ class UserConfirm(Resource):
         # return redirect("http://localhost:3000", code=302)
 
         headers = {"Content-Type": "text/html"}
-        return make_response(render_template("confirmation_page.html", email=user.username), 200, headers)
+        return make_response(
+            render_template("confirmation_page.html", email=user.username), 200, headers
+        )

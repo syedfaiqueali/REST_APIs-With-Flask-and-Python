@@ -11,6 +11,8 @@ flask-marshmallow = "*"
 flask-sqlalchemy = "*"
 marshmallow-sqlalchemy = "*"
 flask-jwt-extended = "==3.25.0"
+requests = "*"
+black = "*"
 
 [dev-packages]
 
