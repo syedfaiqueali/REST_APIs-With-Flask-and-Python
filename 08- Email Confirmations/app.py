@@ -1,3 +1,4 @@
+import os
 from flask import Flask, jsonify
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
@@ -20,9 +21,7 @@ from resources.store import Store, StoreList
 app = Flask(__name__)
 
 # App config properties
-app.config[
-    "SQLALCHEMY_DATABASE_URI"
-] = "sqlite:///data.db"  # From where to read db file
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL")
 app.config[
     "SQLALCHEMY_TRACK_MODIFICATIONS"
 ] = False  # Disable db to track every modifications
@@ -35,7 +34,7 @@ app.config["JWT_BLACKLIST_TOKEN_CHECKS"] = [
     "access",
     "refresh",
 ]  # Enable blacklist for both 'access' and 'refresh'
-app.secret_key = "jose"  # 'jose' is used to encrypt the JWT
+app.secret_key = os.environ.get("APP_SECRET_KEY")  # 'jose' is used to encrypt the JWT
 api = Api(app)
 
 # This decorator is going to affect method below it
