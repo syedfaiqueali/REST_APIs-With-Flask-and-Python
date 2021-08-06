@@ -4,7 +4,7 @@ from models.item import ItemModel
 from schemas.item import ItemSchema
 
 
-class StoreSchema(ma.SQLAlchemyAutoSchema):
+class StoreSchema(ma.Schema):
     # Tells ma that items property is nested inside store and contains many items
     items = ma.Nested(ItemSchema, many=True)
 

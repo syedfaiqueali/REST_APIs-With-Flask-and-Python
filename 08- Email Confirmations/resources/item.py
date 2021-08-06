@@ -69,7 +69,7 @@ class Item(Resource):
 
         # updating
         if item:
-            item.price = data["price"]
+            item.price = item_json["price"]
         # Inserting
         else:
             item_json["name"] = name  # Populating json with item's name

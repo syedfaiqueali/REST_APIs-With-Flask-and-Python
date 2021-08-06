@@ -3,7 +3,7 @@ from models.item import ItemModel
 from models.store import StoreModel
 
 
-class ItemSchema(ma.SQLAlchemyAutoSchema):
+class ItemSchema(ma.Schema):
     # Tell marshmallow that password field is only for loading data
     class Meta:
         model = ItemModel  # Go into ItemModel and look into column def & create marshmallow fields

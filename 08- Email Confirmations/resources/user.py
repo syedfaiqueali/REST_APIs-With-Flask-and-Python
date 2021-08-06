@@ -24,6 +24,7 @@ USER_LOGGED_OUT = "User <id={}> successfully logged out."
 NOT_CONFIRMED_ERROR = (
     "You have not confirmed registeration, please check your email <{}>."
 )
+USER_CONFIRMED = "User confirmed."
 
 # Creating Schema
 user_schema = UserSchema()
@@ -35,13 +36,14 @@ class UserRegister(Resource):
     def post(cls):
         # Creating a UserModel obj
         user_json = request.get_json()
-        user = user_schema.load(user_json)
+        user = user_schema.load(user_json)  #return dict
+        user_obj = UserModel(**user)   #convert dict to obj
 
         # Check if user already exists
-        if UserModel.find_by_username(user.username):
+        if UserModel.find_by_username(user_obj.username):
             return {"message": USER_ALREADY_EXISTS}, 400
 
-        user.save_to_db()
+        user_obj.save_to_db()
 
         return {"message": CREATED_SUCCESSFULLY}, 201
 
@@ -76,11 +78,13 @@ class UserLogin(Resource):
         user_json = request.get_json()
         user_data = user_schema.load(user_json)  # Which we got from request
 
+        user_obj = UserModel(**user_data)
+
         # find req data into the dB => returns obj
-        user = UserModel.find_by_username(user_data.username)
+        user = UserModel.find_by_username(user_obj.username)
 
         # check user and password => authenticate()
-        if user and safe_str_cmp(user.password, user_data.password):
+        if user and safe_str_cmp(user_obj.password, user.password):
             #
             if user.activated:
                 # create access and refresh token and return it => identity()
@@ -115,3 +119,16 @@ class TokenRefresh(Resource):
         current_user = get_jwt_identity()
         new_token = create_access_token(identity=current_user, fresh=False)
         return {"access_token": new_token}, 200
+
+
+class UserConfirm(Resource):
+    @classmethod
+    def get(cls, user_id: int):
+        user = UserModel.find_by_id(user_id)
+        if not User:
+            return {"message": USER_NOT_FOUND}, 404
+
+        # If user found in dB so activate him
+        user.activated = True
+        user.save_to_db()
+        return {"message": USER_CONFIRMED}, 200

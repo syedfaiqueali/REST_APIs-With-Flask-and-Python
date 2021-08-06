@@ -6,12 +6,20 @@ from marshmallow import ValidationError
 from ma import ma
 from db import db
 from blacklist import BLACKLIST
-from resources.user import UserRegister, User, UserLogin, UserLogout, TokenRefresh
+from resources.user import (
+    UserRegister,
+    User,
+    UserLogin,
+    UserLogout,
+    TokenRefresh,
+    UserConfirm,
+)
 from resources.item import Item, ItemList
 from resources.store import Store, StoreList
 
-# App config properties
 app = Flask(__name__)
+
+# App config properties
 app.config[
     "SQLALCHEMY_DATABASE_URI"
 ] = "sqlite:///data.db"  # From where to read db file
@@ -61,6 +69,7 @@ api.add_resource(UserRegister, "/register")
 api.add_resource(User, "/user/<int:user_id>")
 api.add_resource(UserLogin, "/login")  # can also call it /auth
 api.add_resource(UserLogout, "/logout")
+api.add_resource(UserConfirm, "/user_confirm/<int:user_id>")
 api.add_resource(TokenRefresh, "/refresh")
 api.add_resource(Item, "/item/<string:name>")
 api.add_resource(ItemList, "/items")
