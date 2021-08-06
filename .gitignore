@@ -9,3 +9,4 @@
 06- Introduction (Advanced Section)/code/data.db
 07- Serialization with Marshmallow/code/data.db
 08- Email Confirmations/data.db
+08- Email Confirmations/.env

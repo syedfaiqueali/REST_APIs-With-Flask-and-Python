@@ -13,6 +13,7 @@ marshmallow-sqlalchemy = "*"
 flask-jwt-extended = "==3.25.0"
 requests = "*"
 black = "*"
+python-dotenv = "*"
 
 [dev-packages]
 
