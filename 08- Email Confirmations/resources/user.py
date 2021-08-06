@@ -13,6 +13,7 @@ from flask_jwt_extended import (
 from models.user import UserModel
 from schemas.user import UserSchema
 from blacklist import BLACKLIST
+from libs.mailgun import MailGunException
 
 # Constants
 BLANK_ERROR = "{} cannot be blank."
@@ -55,6 +56,9 @@ class UserRegister(Resource):
             user_obj.save_to_db()
             user_obj.send_confirmation_email()
             return {"message": SUCCESS_REGISTER_MESSAGE}, 201
+        except MailGunException as e:  # When send_confirmation_email() failed
+            user_obj.delete_from_db()
+            return {"message": str(e)}, 500
         except:
             traceback.print_exc()  # To print err in console
             return {"message": FAILED_TO_CREATE}, 500
