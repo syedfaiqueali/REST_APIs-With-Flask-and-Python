@@ -9,11 +9,11 @@ flask-restful = "==0.3.6"
 marshmallow = "*"
 flask-marshmallow = "*"
 flask-sqlalchemy = "*"
-marshmallow-sqlalchemy = "*"
 flask-jwt-extended = "==3.25.0"
 requests = "*"
 black = "*"
 python-dotenv = "*"
+marshmallow-sqlalchemy = "*"
 
 [dev-packages]
 
