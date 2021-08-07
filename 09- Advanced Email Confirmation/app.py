@@ -1,4 +1,5 @@
 import os
+
 from flask import Flask, jsonify
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
@@ -7,16 +8,10 @@ from marshmallow import ValidationError
 from ma import ma
 from db import db
 from blacklist import BLACKLIST
-from resources.user import (
-    UserRegister,
-    User,
-    UserLogin,
-    UserLogout,
-    TokenRefresh,
-    UserConfirm,
-)
+from resources.user import UserRegister, UserLogin, User, TokenRefresh, UserLogout
 from resources.item import Item, ItemList
 from resources.store import Store, StoreList
+from resources.confirmation import Confirmation, ConfirmationByUser
 
 app = Flask(__name__)
 
@@ -68,7 +63,12 @@ api.add_resource(UserRegister, "/register")
 api.add_resource(User, "/user/<int:user_id>")
 api.add_resource(UserLogin, "/login")  # can also call it /auth
 api.add_resource(UserLogout, "/logout")
-api.add_resource(UserConfirm, "/user_confirm/<int:user_id>")
+api.add_resource(
+    Confirmation, "/user_confirmation/<string:confirmation_id>"
+)  # For HTML page
+api.add_resource(
+    ConfirmationByUser, "/confirmation/user/<int:user_id>"
+)  # For retrieving or resending confirmation
 api.add_resource(TokenRefresh, "/refresh")
 api.add_resource(Item, "/item/<string:name>")
 api.add_resource(ItemList, "/items")

@@ -2,7 +2,7 @@ import traceback
 from time import time
 
 from flask import make_response, render_template
-from flast_restful import Resource
+from flask_restful import Resource
 
 from libs.mailgun import MailGunException
 from resources.user import USER_NOT_FOUND
@@ -41,7 +41,7 @@ class Confirmation(Resource):
 
         headers = {"Content-Type": "text/html"}
         return make_response(
-            render_template("confirmation_path.html", email=confirmed.user.email),
+            render_template("confirmation_page.html", email=confirmation.user.email),
             200,
             headers,
         )
@@ -75,6 +75,7 @@ class ConfirmationByUser(Resource):
             return {"message": USER_NOT_FOUND}, 404
 
         try:
+            # Find the most current confirmation for the user
             confirmation = user.most_recent_confirmation
             if confirmation:
                 if confirmation.confirmed:
@@ -83,9 +84,11 @@ class ConfirmationByUser(Resource):
                 # Confirmation exists but not confirmed
                 confirmation.force_to_expire()
 
-            # For new confirmation
+            # Create new confirmation
             new_confirmation = ConfirmationModel(user_id)
             new_confirmation.save_to_db()
+            # Does 'user' obj know the new confirmation by now? Yes
+            # An excellent example where lazy=dynamic comes into use
             user.send_confirmation_email()
             return {"message": RESEND_SUCCESSFUL}, 201
 

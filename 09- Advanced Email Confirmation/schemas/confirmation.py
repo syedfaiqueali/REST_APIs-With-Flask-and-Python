@@ -1,5 +1,5 @@
 from ma import ma
-from models.confirmations import ConfirmationModel
+from models.confirmation import ConfirmationModel
 
 
 class ConfirmationSchema(ma.SQLAlchemyAutoSchema):

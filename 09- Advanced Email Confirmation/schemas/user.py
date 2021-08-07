@@ -14,8 +14,8 @@ class UserSchema(ma.SQLAlchemyAutoSchema):
             "confirmation",
         )  # Will not be looked at when creating the model
 
-    @pre_dump
-    def _pre_dump(self, user: UserModel):
-        """Whenever we resent the confirmation, the schema will not include old expired confirmations."""
-        user.confirmation = [user.most_recent_confirmation]
-        return user
+        @pre_dump
+        def _pre_dump(self, user: UserModel):
+            """Whenever we resent the confirmation, the schema will not include old expired confirmations."""
+            user.confirmation = [user.most_recent_confirmation]
+            return user

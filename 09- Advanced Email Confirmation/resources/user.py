@@ -59,7 +59,7 @@ class UserRegister(Resource):
             user_obj.save_to_db()
 
             # Create a confirmation model with user id and save it to db before sending confirmation email
-            confirmation = ConfirmationModel(user.id)
+            confirmation = ConfirmationModel(user_obj.id)
             confirmation.save_to_db()
 
             user_obj.send_confirmation_email()
@@ -124,7 +124,7 @@ class UserLogin(Resource):
                     "access_token": access_token,  # main jwt_token
                     "refresh_token": refresh_token,
                 }, 200
-            return {"message": NOT_CONFIRMED_ERROR.format(user.username)}, 400
+            return {"message": NOT_CONFIRMED_ERROR.format(user.email)}, 400
 
         # User doesn't exists
         return {"message": INVALID_CREDENTIALS}, 401
