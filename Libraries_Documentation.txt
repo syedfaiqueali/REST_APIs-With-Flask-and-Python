@@ -31,6 +31,18 @@ THIS DOCUMENTATION CONTAINS ALL THE LIBRARIES AND METHODS USED IN THIS REPOSITOR
 	  Added lib and give 'model = UserModel' to create and instead of giving json back it looks into the column def and
 	  validates against them and if all passes it gives back a user model instead of a dict
 
+	- confirmation = db.relationship(
+       	 "ConfirmationModel", lazy="dynamic", cascade="all, delete-orphan"
+    	  )
+	
+	  # user = UserModel()
+	  # confirmation = ConfirmationModel()
+	  # confirmation.save_to_db()
+	  # print(user.confirmation) ; if lazy=dynamic otherwise it will say 'None'
+	
+
+
+
 
 	• TO USE FLASK INTO APP
 	  from flask import Flask
