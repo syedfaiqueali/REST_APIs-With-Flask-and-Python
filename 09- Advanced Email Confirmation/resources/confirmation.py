@@ -5,18 +5,11 @@ from flask import make_response, render_template
 from flask_restful import Resource
 
 from libs.mailgun import MailGunException
-from resources.user import USER_NOT_FOUND
+from libs.strings import gettext
 from models.confirmation import ConfirmationModel
 from models.user import UserModel
 from schemas.confirmation import ConfirmationSchema
 
-
-# Constants
-NOT_FOUND = "Confirmation reference not found."
-EXPIRED = "The link has expired."
-ALREADY_CONFIRMED = "Registeration has alredy been confirmed."
-RESEND_FAIL = "Internal Server Error. Failed to resend confirmation email."
-RESEND_SUCCESSFUL = "Email confirmation successfully re-sent."
 
 confirmation_schema = ConfirmationSchema()
 
@@ -28,13 +21,13 @@ class Confirmation(Resource):
         confirmation = ConfirmationModel.find_by_id(confirmation_id)
 
         if not confirmation:
-            return {"message": NOT_FOUND}, 404
+            return {"message": gettext("confirmation_not_found")}, 404
 
         if confirmation.expired:
-            return {"message": EXPIRED}, 400
+            return {"message": gettext("confirmation_link_expired")}, 400
 
         if confirmation.confirmed:
-            return {"message": ALREADY_CONFIRMED}, 400
+            return {"message": gettext("confirmation_already_confirmed")}, 400
 
         confirmation.confirmed = True
         confirmation.save_to_db()
@@ -54,7 +47,7 @@ class ConfirmationByUser(Resource):
         user = UserModel.find_by_id(user_id)
 
         if not user:
-            return {"message": USER_NOT_FOUND}, 404
+            return {"message": gettext("user_not_found")}, 404
         return (
             {
                 "current_time": int(time()),
@@ -72,14 +65,14 @@ class ConfirmationByUser(Resource):
         user = UserModel.find_by_id(user_id)
 
         if not user:
-            return {"message": USER_NOT_FOUND}, 404
+            return {"message": gettext("user_not_found")}, 404
 
         try:
             # Find the most current confirmation for the user
             confirmation = user.most_recent_confirmation
             if confirmation:
                 if confirmation.confirmed:
-                    return {"message": ALREADY_CONFIRMED}, 400
+                    return {"message": gettext("confirmation_already_confirmed")}, 400
 
                 # Confirmation exists but not confirmed
                 confirmation.force_to_expire()
@@ -90,10 +83,10 @@ class ConfirmationByUser(Resource):
             # Does 'user' obj know the new confirmation by now? Yes
             # An excellent example where lazy=dynamic comes into use
             user.send_confirmation_email()
-            return {"message": RESEND_SUCCESSFUL}, 201
+            return {"message": gettext("confirmation_resend_successful")}, 201
 
         except MailGunException as e:
             return {"message": str(e)}, 500
         except:
             traceback.print_exc()
-            return {"message": RESEND_FAIL}, 500
+            return {"message": gettext("confirmation_resend_fail")}, 500

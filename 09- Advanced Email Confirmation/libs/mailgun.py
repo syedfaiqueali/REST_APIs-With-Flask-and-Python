@@ -1,11 +1,7 @@
 import os
 from typing import List
 from requests import Response, post
-
-# Constants
-FAILED_LOAD_API_KEY = "Failed to load MailGun API key."
-FAILED_LOAD_DOMAIN = "Failed to load MailGun domain."
-ERROR_SENDING_EMAIL = "Error in sending confirmation email, user registeration failed."
+from libs.strings import gettext
 
 # Custom Exception Class
 class MailGunException(Exception):
@@ -20,17 +16,17 @@ class Mailgun:
 
     # Constants
     FROM_TITLE = "Stores REST API"
-    FROM_EMAIL = "faiqueali017@sandboxcc439ff7cbdc492a9c46699fcb61ef04.mailgun.org"
+    FROM_EMAIL = f"do-not-reply@{MAILGUN_DOMAIN}"
 
     @classmethod
     def send_email(
         cls, email: List[str], subject: str, text: str, html: str
     ) -> Response:
         if cls.MAILGUN_API_KEY is None:
-            raise MailGunException(FAILED_LOAD_API_KEY)
+            raise MailGunException(gettext("mailgun_failed_load_api_key"))
 
         if cls.MAILGUN_DOMAIN is None:
-            raise MailGunException(FAILED_LOAD_DOMAIN)
+            raise MailGunException(gettext("mailgun_failed_load_domain"))
 
         response = post(
             f"https://api.mailgun.net/v3/{cls.MAILGUN_DOMAIN}/messages",
@@ -45,6 +41,6 @@ class Mailgun:
         )
 
         if response.status_code != 200:
-            raise MailGunException(ERROR_SENDING_EMAIL)
+            raise MailGunException(gettext("mailgun_error_send_email"))
 
         return response
