@@ -31,7 +31,7 @@ THIS DOCUMENTATION CONTAINS ALL THE LIBRARIES AND METHODS USED IN THIS REPOSITOR
 	  Added lib and give 'model = UserModel' to create and instead of giving json back it looks into the column def and
 	  validates against them and if all passes it gives back a user model instead of a dict
 
-	- confirmation = db.relationship(
+	⁃ confirmation = db.relationship(
        	 "ConfirmationModel", lazy="dynamic", cascade="all, delete-orphan"
     	  )
 	
@@ -40,7 +40,14 @@ THIS DOCUMENTATION CONTAINS ALL THE LIBRARIES AND METHODS USED IN THIS REPOSITOR
 	  # confirmation.save_to_db()
 	  # print(user.confirmation) ; if lazy=dynamic otherwise it will say 'None'
 	
+	⁃ USE DEFAULT LOCALIZATION
+	  from libs import strings
+	  strings.gettext("mailgun_failed_load_api_key")
 
+	⁃ CHANGE DEFAULT LOCALIZATION
+	  strings.default_locale = 'es-es'
+	  strings.refresh()
+	  strings.gettext("mailgun_failed_load_api_key")  OR USE SETTER FUNC IN LIB TO CHANGE LOCALE
 
 
 
