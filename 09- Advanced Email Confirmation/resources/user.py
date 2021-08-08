@@ -12,12 +12,12 @@ from flask_jwt_extended import (
     get_raw_jwt,
 )
 
-from libs.strings import gettext
 from models.user import UserModel
+from models.confirmation import ConfirmationModel
 from schemas.user import UserSchema
 from blacklist import BLACKLIST
 from libs.mailgun import MailGunException
-from models.confirmation import ConfirmationModel
+from libs.strings import gettext
 
 # Creating Schema
 user_schema = UserSchema()
