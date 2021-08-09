@@ -18,6 +18,7 @@ class UserModel(db.Model):
 
     # lazy="dynamic" ;when new usermodel created, the ConfirmationModel not retrieved from the db when access confir. property then it access
     # cascade="all, delete-orphan" ;when we delete a user, it going to confirmation and delete all his belongings
+    # overlaps="user" ;to hide warning in debug
     confirmation = db.relationship(
         "ConfirmationModel",
         lazy="dynamic",

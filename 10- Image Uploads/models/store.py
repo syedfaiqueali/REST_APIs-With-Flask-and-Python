@@ -13,6 +13,7 @@ class StoreModel(db.Model):
     # lazy='dynamic' ;tells SQLAlchemy to not go into the items table
     # and creates an obj for each item and everytime we call json(self)
     # we have to look into table again and again
+    # overlaps="store" ;to hide warning in debug
     items = db.relationship("ItemModel", lazy="dynamic", overlaps="store")
 
     @classmethod
