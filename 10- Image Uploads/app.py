@@ -1,8 +1,10 @@
 import os
 
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
+
+from flask_uploads import configure_uploads, patch_request_class
 from marshmallow import ValidationError
 from dotenv import load_dotenv
 
@@ -13,11 +15,16 @@ from resources.user import UserRegister, UserLogin, User, TokenRefresh, UserLogo
 from resources.item import Item, ItemList
 from resources.store import Store, StoreList
 from resources.confirmation import Confirmation, ConfirmationByUser
+from resources.image import ImageUpload
+from libs.image_helper import IMAGE_SET
 
 app = Flask(__name__)
 load_dotenv(".env", verbose=True)  # load .env
 app.config.from_object("default_config")  # load config using 'default_config'
 app.config.from_envvar("APPLICATION_SETTINGS")  # Now load 'app config'
+# app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024
+patch_request_class(app, 10 * 1024 * 1024)  # to limit max size of images =10MB
+configure_uploads(app, IMAGE_SET)
 api = Api(app)
 
 # This decorator is going to affect method below it
@@ -62,6 +69,7 @@ api.add_resource(Item, "/item/<string:name>")
 api.add_resource(ItemList, "/items")
 api.add_resource(Store, "/store/<string:name>")
 api.add_resource(StoreList, "/stores")
+api.add_resource(ImageUpload, "/upload/image")
 
 
 if __name__ == "__main__":

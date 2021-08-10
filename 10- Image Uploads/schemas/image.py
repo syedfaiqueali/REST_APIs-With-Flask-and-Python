@@ -5,7 +5,7 @@ from werkzeug.datastructures import FileStorage
 class FileStorageField(fields.Field):
     default_error_messages = {"invalid": "Not a valid image."}
 
-    def _deserialize(self, value, attr, data) -> FileStorage:
+    def _deserialize(self, value, attr, data, **kwargs) -> FileStorage:
         # If it exists
         if value is None:
             return None
