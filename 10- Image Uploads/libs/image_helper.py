@@ -54,7 +54,7 @@ def get_basename(file: Union[str, FileStorage]) -> str:
     return os.path.split(filename)[1]  # [0] => ..some_folder ;[1] => img_name.jpg
 
 
-def get_extension():
+def get_extension(file: Union[str, FileStorage]) -> str:
     """Returns file extension."""
     filename = _retrieve_filename(file)
     return os.path.splitext(filename)[1]  # [0] => image_name ;[1] => .png|.jpeg etc

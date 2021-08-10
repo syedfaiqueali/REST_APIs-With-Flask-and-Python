@@ -26,7 +26,7 @@ class ImageUpload(Resource):
         folder = f"user_{user_id}"  # static/images/user_1
         try:
             image_path = image_helper.save_image(data["image"], folder=folder)
-            basename = image_helper.get_basename(image_path)
+            basename = image_helper.get_basename(image_path)  # To get rid of image naming conflict
             return {"message": gettext("image_uploaded").format(basename)}, 201
         except UploadNotAllowed:
             extension = image_helper.get_extension(data["image"])
@@ -73,3 +73,36 @@ class Image(Resource):
         except:
             traceback.print_exc()
             return {"message": gettext("image_delete_failed")}, 500
+
+
+class AvatarUpload(Resource):
+    @jwt_required
+    def put(self):
+        """
+        This endpoint is used to upload user avatars. All avatars are names after the user's ID.
+        Uploading a new avatar overwrites the existing one.
+        """
+        data = image_schema.load(request.files)
+        filename = f"user_{get_jwt_identity()}"
+        folder = "avatars"
+        avatar_path = image_helper.find_image_any_format(filename, folder)
+
+        # If avatar exist already, delete it
+        if avatar_path:
+            try:
+                os.remove(avatar_path)
+            except:
+                return {"message": gettext("avatar_delete_failed")}, 500
+
+        # Save new image
+        try:
+            ext = image_helper.get_extension(data["image"].filename)
+            avatar = filename + ext
+            avatar_path = image_helper.save_image(
+                data["image"], folder=folder, name=avatar
+            )
+            basename = image_helper.get_basename(avatar_path)
+            return {"message": gettext("avatar_upload").format(basename)}, 200
+        except UploadNotAllowed:
+            extension = image_helper.get_extension(data["image"])
+            return {"message": gettext("image_illegal_extension").format(extension)}, 400
