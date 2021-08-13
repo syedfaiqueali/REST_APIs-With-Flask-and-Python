@@ -13,6 +13,8 @@ flask-marshmallow = "*"
 marshmallow-sqlalchemy = "*"
 marshmallow = "*"
 psycopg2-binary = "*"
+wheel = "*"
+flask-migrate = "*"
 
 [dev-packages]
 

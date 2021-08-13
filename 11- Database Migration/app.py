@@ -3,6 +3,7 @@ import os
 from flask import Flask, jsonify
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
+from flask_migrate import Migrate
 from marshmallow import ValidationError
 from dotenv import load_dotenv
 
@@ -14,15 +15,13 @@ from resources.user import UserRegister, UserLogin, User
 app = Flask(__name__)
 load_dotenv(".env")
 app.config["DEBUG"] = True
-'''app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get(
-    "DATABASE_URI", "sqlite:///data.db"
-)'''
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://zhomcfwh:xqxZ72PjQGlsCUxk3bXevVuP43SHf8AR@ruby.db.elephantsql.com/zhomcfwh"
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URI", "sqlite:///data.db")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["PROPAGATE_EXCEPTIONS"] = True
 app.secret_key = "jose"
 api = Api(app)
 jwt = JWTManager(app)
+migrate = Migrate(app, db)
 
 
 @app.before_first_request
