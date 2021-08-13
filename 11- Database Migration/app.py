@@ -12,7 +12,10 @@ from ma import ma
 from resources.user import UserRegister, UserLogin, User
 
 
+
 app = Flask(__name__)
+db.init_app(app)
+
 load_dotenv(".env")
 app.config["DEBUG"] = True
 app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URI", "sqlite:///data.db")
@@ -39,6 +42,6 @@ api.add_resource(User, "/user/<int:user_id>")
 api.add_resource(UserLogin, "/login")
 
 if __name__ == "__main__":
-    db.init_app(app)
+    #db.init_app(app)  # place this below app=Flask(__name__) when migrating
     ma.init_app(app)
     app.run(port=5000, debug=True)
