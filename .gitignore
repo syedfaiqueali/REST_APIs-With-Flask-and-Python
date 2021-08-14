@@ -22,3 +22,4 @@
 12- Third party login with OAuth/data.db
 12- Third party login with OAuth/data.db
 *.db
+13- Payments with Stripe/.env
