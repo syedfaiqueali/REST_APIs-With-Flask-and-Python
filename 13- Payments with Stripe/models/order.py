@@ -3,6 +3,7 @@ import stripe
 
 from db import db
 from typing import List
+from flask import Flask, jsonify
 
 # Constants
 CURRENCY = "usd"
@@ -40,6 +41,23 @@ class OrderModel(db.Model):
     # back_populates="order" (when we want reflective changes to occur in both tables)
     items = db.relationship("ItemsInOrder", back_populates="order")
 
+    @property
+    def description(self):
+        """
+        Generates a simple string represting this order,
+        in the format of 5x chairs, 2x tables
+        """
+        item_counts = [f"{i.quantity}x {i.item.name}" for i in self.items]
+        return ",".join(item_counts)
+
+    @property
+    def amount(self):
+        # Price * Quantity Do this for all items in list
+        # To convert into cents => * 100
+        # sum is 29.95 -> *100 -> 2995 -> int(2995)
+        # sum is 29.95 -> int(29.55) -> 29*100 -> 2900 => Loose value
+        return int(sum([item_data.item.price * item_data.quantity for item_data in self.items]) * 100)
+
     @classmethod
     def find_all(cls) -> List["OrderModel"]:
         return cls.query.all()
@@ -57,6 +75,18 @@ class OrderModel(db.Model):
             description=self.description,
             source=token
         )
+
+    def charge_with_stripe1(self):
+        stripe.api_key = os.getenv("STRIPE_API_KEY")
+        
+        intent = stripe.PaymentIntent.create(
+            amount=self.amount,
+            currency=CURRENCY,
+            payment_method_types=['card'],
+            description=self.description
+        )
+
+        return jsonify(client_secret=intent.client_secret)
 
     def set_status(self, new_status: str) -> None:
         self.status = new_status

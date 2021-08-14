@@ -12,6 +12,10 @@ order_schema = OrderSchema()
 
 class Order(Resource):
     @classmethod
+    def get(cls):
+        return order_schema.dump(OrderModel.find_all(), many=True), 200
+
+    @classmethod
     def post(cls):
         """
         Expect a token and a list of item ids from the request body.
@@ -38,6 +42,7 @@ class Order(Resource):
 
         order.set_status("failed")
         #order.charge_with_stripe(data["token"])
+        order.charge_with_stripe1()
         order.set_status("complete") # Only if above line passes
 
         return order_schema.dump(order)
