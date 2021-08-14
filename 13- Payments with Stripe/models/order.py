@@ -7,11 +7,25 @@ from typing import List
 # [id, item_id, order_id] => Columns
 # [1, 3, 1]
 # [2, 6, 1]
+'''
 items_to_orders = db.Table(
     "items_to_orders",  # Table name
     db.Column("item_id", db.Integer, db.ForeignKey("items.id")),
     db.Column("order_id", db.Integer, db.ForeignKey("orders.id"))
 )
+'''
+
+class ItemsInOrder(db.Model):
+    __tablename__ = "items_in_orders"
+
+    id = db.Column(db.Integer, primary_key=True)
+    item_id = db.Column(db.Integer, db.ForeignKey("items.id"))
+    order_id = db.Column(db.Integer, db.ForeignKey("orders.id"))
+    quantity = db.Column(db.Integer)
+
+    item = db.relationship("ItemModel")
+    order = db.relationship("OrderModel", back_populates="items")
+
 
 class OrderModel(db.Model):
     __tablename__ = "orders"
@@ -19,9 +33,8 @@ class OrderModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     status = db.Column(db.String(20), nullable=False)
 
-    # Give a secondary table(items_to_orders) to go and find the items associated with the order
-    # Many to many relationship
-    items = db.relationship("ItemModel", secondary=items_to_orders, lazy="dynamic")
+    # back_populates="order" (when we want reflective changes to occur in both tables)
+    items = db.relationship("ItemsInOrder", back_populates="order")
 
     @classmethod
     def find_all(cls) -> List["OrderModel"]:
