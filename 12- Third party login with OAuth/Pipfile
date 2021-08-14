@@ -13,6 +13,7 @@ marshmallow = "*"
 marshmallow-sqlalchemy = "*"
 flask-marshmallow = "*"
 psycopg2-binary = "*"
+flask-oauthlib = "*"
 
 [dev-packages]
 
