@@ -1,4 +1,4 @@
-THIS DOCUMENTATION CONTAINS ALL THE LIBRARIES AND METHODS USED IN THIS REPOSITORY 
+	THIS DOCUMENTATION CONTAINS ALL THE LIBRARIES AND METHODS USED IN THIS REPOSITORY 
 
 
 	⁃ Classes always start with a uppercase.
@@ -49,6 +49,9 @@ THIS DOCUMENTATION CONTAINS ALL THE LIBRARIES AND METHODS USED IN THIS REPOSITOR
 	  strings.refresh()
 	  strings.gettext("mailgun_failed_load_api_key")  OR USE SETTER FUNC IN LIB TO CHANGE LOCALE
 
+
+
+-------------------------------------------------------------------------------------------------------------------------------------
 
 
 	• TO USE FLASK INTO APP
