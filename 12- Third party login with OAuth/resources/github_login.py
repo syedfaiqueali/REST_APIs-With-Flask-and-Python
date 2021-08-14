@@ -1,4 +1,4 @@
-from flask import g
+from flask import g, request
 from flask_restful import Resource
 from flask_jwt_extended import create_access_token, create_refresh_token
 from oa import github
@@ -15,6 +15,15 @@ class GithubAuthorize(Resource):
     @classmethod
     def get(cls):
         resp = github.authorized_response()
+
+        # Edge case check
+        if resp is None or resp.get("access_token") is None:
+            error_response = {
+                "error": request.args["error"],
+                "error_description": request.args["error_description"]
+            }
+            return error_response
+
         g.access_token = resp['access_token']  #return access_token
         github_user = github.get('user')   #get user's github details
         github_username = github_user.data['login'] #get user's name
