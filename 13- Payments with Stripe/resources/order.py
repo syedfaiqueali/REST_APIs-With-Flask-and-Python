@@ -2,6 +2,7 @@ from collections import Counter
 
 from flask import request
 from flask_restful import Resource
+from stripe import error
 
 from libs.strings import gettext
 from models.item import ItemModel
@@ -40,9 +41,41 @@ class Order(Resource):
         order = OrderModel(items=items, status="pending")
         order.save_to_db()  # This does not submit to stripe
 
-        order.set_status("failed")
-        #order.charge_with_stripe(data["token"])
-        order.charge_with_stripe1()
-        order.set_status("complete") # Only if above line passes
+        try:
+            # Use Stripe's library to make requests...
+            order.set_status("failed")
+            #order.charge_with_stripe(data["token"])
+            order.charge_with_stripe1()
+            order.set_status("complete") # Only if above line passes
 
-        return order_schema.dump(order)
+            return order_schema.dump(order), 200
+
+        except stripe.error.CardError as e:
+            # Since it's a decline, stripe.error.CardError will be caught
+            print('Status is: %s' % e.http_status)
+            print('Code is: %s' % e.code)
+            # param is '' in this case
+            print('Param is: %s' % e.param)
+            print('Message is: %s' % e.user_message)
+            return e.json_body, e.http_status
+        except stripe.error.RateLimitError as e:
+            # Too many requests made to the API too quickly
+            return e.json_body, e.http_status
+        except stripe.error.InvalidRequestError as e:
+            # Invalid parameters were supplied to Stripe's API
+            return e.json_body, e.http_status
+        except stripe.error.AuthenticationError as e:
+            # Authentication with Stripe's API failed
+            # (maybe you changed API keys recently)
+            return e.json_body, e.http_status
+        except stripe.error.APIConnectionError as e:
+            # Network communication with Stripe failed
+            return e.json_body, e.http_status
+        except stripe.error.StripeError as e:
+            # Display a very generic error to the user, and maybe send
+            # yourself an email
+            return e.json_body, e.http_status
+        except Exception as e:
+            # Something else happened, completely unrelated to Stripe
+            print(e)
+            return {"message": gettext("order_error")}, 500

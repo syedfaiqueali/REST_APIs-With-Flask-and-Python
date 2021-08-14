@@ -15,5 +15,7 @@
   "user_invalid_credentials": "Invalid credentials!",
   "user_logged_out": "User <id={}> successfully logged out.",
   "user_registered": "Account created successfully.",
-  "order_item_by_id_not_found": "An item with id <id={}> in this order cannot be found."
+
+  "order_item_by_id_not_found": "An item with id <id={}> in this order cannot be found.",
+  "order_error": "Internal Server Error while paying for your order."
 }
