@@ -1,7 +1,11 @@
 import os
+import stripe
 
 from db import db
 from typing import List
+
+# Constants
+CURRENCY = "usd"
 
 # Defining table without Model, Table Id col would be default
 # [id, item_id, order_id] => Columns
@@ -43,6 +47,16 @@ class OrderModel(db.Model):
     @classmethod
     def find_by_id(cls, _id: int) -> "OrderModel":
         return cls.query.filter_by(id=_id).first()
+
+    def charge_with_stripe(self, token:str) -> stripe.Charge:
+        stripe.api_key = os.getenv("STRIPE_API_KEY")
+
+        return stripe.Charge.create(
+            amount=self.amount,  # amount of cents (100 means USD$1.00)
+            currency=CURRENCY,
+            description=self.description,
+            source=token
+        )
 
     def set_status(self, new_status: str) -> None:
         self.status = new_status

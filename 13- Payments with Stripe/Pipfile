@@ -12,6 +12,7 @@ python-dotenv = "*"
 marshmallow = "*"
 marshmallow-sqlalchemy = "*"
 flask-marshmallow = "*"
+stripe = "*"
 
 [dev-packages]
 

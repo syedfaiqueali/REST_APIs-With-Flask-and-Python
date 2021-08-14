@@ -6,7 +6,9 @@ from flask_restful import Resource
 from libs.strings import gettext
 from models.item import ItemModel
 from models.order import OrderModel, ItemsInOrder
+from schemas.order import OrderSchema
 
+order_schema = OrderSchema()
 
 class Order(Resource):
     @classmethod
@@ -23,7 +25,7 @@ class Order(Resource):
 
         # Iterate over items and retrieve them from the database
         # (id, count) -> for loop
-        for _id in count in item_id_quantities.most_common(): #most_common() -> [(5,3), (3,1), (2,1)]
+        for _id, count in item_id_quantities.most_common(): #most_common() -> [(5,3), (3,1), (2,1)]
             item = ItemModel.find_by_id(_id)
             if not item:
                 return {"message": gettext("order_item_by_id_not_found").format(_id)}, 404
@@ -34,4 +36,8 @@ class Order(Resource):
         order = OrderModel(items=items, status="pending")
         order.save_to_db()  # This does not submit to stripe
 
-        order.set_status("something")
+        order.set_status("failed")
+        #order.charge_with_stripe(data["token"])
+        order.set_status("complete") # Only if above line passes
+
+        return order_schema.dump(order)
