@@ -9,7 +9,7 @@ load_dotenv(".env")
 from db import db
 from ma import ma
 from oa import oauth
-from resources.user import UserRegister, UserLogin, User
+from resources.user import UserRegister, UserLogin, User, SetPassword
 from resources.github_login import GithubLogin, GithubAuthorize
 
 
@@ -35,6 +35,7 @@ api.add_resource(User, "/user/<int:user_id>")
 api.add_resource(UserLogin, "/login")
 api.add_resource(GithubLogin,"/login/github")
 api.add_resource(GithubAuthorize,"/login/github/authorized")
+api.add_resource(SetPassword, "/user/password")
 
 
 if __name__ == "__main__":

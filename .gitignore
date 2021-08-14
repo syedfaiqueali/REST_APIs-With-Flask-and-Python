@@ -21,3 +21,4 @@
 12- Third party login with OAuth/default_config.py
 12- Third party login with OAuth/data.db
 12- Third party login with OAuth/data.db
+*.db
