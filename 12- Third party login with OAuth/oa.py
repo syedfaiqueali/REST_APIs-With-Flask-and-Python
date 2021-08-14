@@ -1,8 +1,8 @@
 """
 THE FILE WILL HOST ALL CLIENT SETTINGS.
 """
-
-import flask_oauthlib.client import OAuth
+import os
+from flask_oauthlib.client import OAuth
 
 oauth = OAuth()
 
@@ -15,5 +15,5 @@ github = oauth.remote_app(
     request_token_url=None,  #OAuth2.0 mein None
     access_token_method="POST",
     access_token_url="https://github.com/login/oauth/access_token", # What we send data to get access_token back
-    authorized_url="https://github.com/login/oauth/authorize" # Where we send user in initial req
+    authorize_url="https://github.com/login/oauth/authorize" # Where we send user in initial req
 )
