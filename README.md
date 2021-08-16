@@ -50,6 +50,7 @@
       <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#installation">Installation</a></li>
+        <li><a href="#environment">Environment Setup</a></li>
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
@@ -85,6 +86,14 @@ Also looking into essential technologies Git, Heroku, and nginx.
 * Bring your REST API development to a whole new level by getting familiar with more of the Flask ecosystem
 * Improve operations of existing REST APIs with database migrations and extensive refactoring knowledge
 * Easily deploy documentation pages and test your API with Postman's collection runner
+* Use Marshmallow for data serialization and deserialization
+* Send e-mails and user confirmations
+* Upload images
+* Database migrations
+* Easy ways of writing documentation and testing your API
+* Handle payments using Stripe
+* Third party login using OAuth (GitHub is used as the example)
+
 
 ### But what is a REST API anyway?
 A REST API is an application that accepts data from clients and returns data back. For example, a REST API could accept text data from the client, such as a username and password, and return whether that is a valid user in the database.
@@ -113,24 +122,47 @@ You should have python and pip installed on your machine.
    ```
 2. Install libraries
    ```sh
-   pip install flask
+   pip install library_name
    ```
-3. To install virtual environment (Browser to project folder's directory, then run)
+
+### Environment Setup
+#### i) For Virtual Environment
+1. To install virtual environment (Browser to project folder's directory, then run)
    ```sh
    pip install virtualenv
    ```
-4. To restrict python version in your environment
+2. Then restrict python version in your environment
    ```sh
    virtualenv venv --python=python3.8
    ```
-5. To activate the environment
+3. To activate virtual environment
    ```sh
    source venv/bin/activate
    ```
-6. To run local server
+4. To run the app
    ```
    python app.py
    ```
+
+
+#### ii) For Python Environment
+1. To install python environment (Browser to project folder's directory, then run)
+   ```sh
+   pip install pipenv
+   ```
+2. Then restrict python version in your environment
+  ```sh
+  pipenv --python=python3.8
+  ```  
+3. To activate virtual environment
+  ```sh
+  pipenv shell
+  ```  
+4. To run the app
+   ```
+   python app.py
+   ```
+
 
 
 
