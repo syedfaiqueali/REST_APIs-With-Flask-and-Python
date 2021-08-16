@@ -151,13 +151,13 @@ You should have python and pip installed on your machine.
    pip install pipenv
    ```
 2. Then restrict python version in your environment
-  ```sh
-  pipenv --python=python3.8
-  ```  
+   ```sh
+   pipenv --python=python3.8
+   ```  
 3. To activate virtual environment
-  ```sh
-  pipenv shell
-  ```  
+   ```sh
+   pipenv shell
+   ```  
 4. To run the app
    ```
    python app.py
