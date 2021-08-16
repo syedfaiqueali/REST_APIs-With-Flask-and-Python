@@ -81,6 +81,10 @@ Also looking into essential technologies Git, Heroku, and nginx.
 * Handle seamless user authentication with advanced features like token refresh
 * Handle log-outs and prevent abuse in your REST APIs with JWT blacklisting
 * Develop professional-grade REST APIs with expert instruction
+* Integrate advanced functionality in your API such as image upload, payments, or user confirmation e-mails!
+* Bring your REST API development to a whole new level by getting familiar with more of the Flask ecosystem
+* Improve operations of existing REST APIs with database migrations and extensive refactoring knowledge
+* Easily deploy documentation pages and test your API with Postman's collection runner
 
 ### But what is a REST API anyway?
 A REST API is an application that accepts data from clients and returns data back. For example, a REST API could accept text data from the client, such as a username and password, and return whether that is a valid user in the database.
